@@ -1,4 +1,4 @@
-# Contributing to Soenneker.Utils.Strings.DiceCoefficient
+﻿# Contributing to Soenneker.Utils.Strings.DiceCoefficient
 
 We're excited that you're interested in contributing!
 
