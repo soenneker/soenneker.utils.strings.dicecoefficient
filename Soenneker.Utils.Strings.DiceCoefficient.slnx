@@ -4,10 +4,11 @@
   </Folder>
   <Folder Name="/.github/workflows/">
     <File Path=".github/workflows/build-and-test.yml" />
+    <File Path=".github/workflows/codeql.yml" />
     <File Path=".github/workflows/publish-package.yml" />
   </Folder>
   <Folder Name="/src/">
-    <Project Path="src/Soenneker.Utils.Strings.DiceCoefficient.csproj" />
+    <Project Path="src/Soenneker.Utils.Strings.DiceCoefficient/Soenneker.Utils.Strings.DiceCoefficient.csproj" />
   </Folder>
   <Folder Name="/test/">
     <Project Path="test/Soenneker.Utils.Strings.DiceCoefficient.Tests/Soenneker.Utils.Strings.DiceCoefficient.Tests.csproj" />

@@ -26,7 +26,7 @@
     <PackageReference Include="xUnit.v3" Version="3.2.2" /></ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\Soenneker.Utils.Strings.DiceCoefficient.csproj" />
+        <ProjectReference Include="..\..\src\Soenneker.Utils.Strings.DiceCoefficient\Soenneker.Utils.Strings.DiceCoefficient.csproj" />
     </ItemGroup>
 
     <ItemGroup>
