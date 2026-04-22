@@ -1,14 +1,13 @@
 using AwesomeAssertions;
-using Soenneker.Tests.FixturedUnit;
-using Xunit;
+using Soenneker.Tests.HostedUnit;
 
 
 namespace Soenneker.Utils.Strings.DiceCoefficient.Tests;
 
-[Collection("Collection")]
-public class DiceCoefficientStringUtilTests : FixturedUnitTest
+[ClassDataSource<Host>(Shared = SharedType.PerTestSession)]
+public class DiceCoefficientStringUtilTests : HostedUnitTest
 {
-    public DiceCoefficientStringUtilTests(Fixture fixture, ITestOutputHelper output) : base(fixture, output)
+    public DiceCoefficientStringUtilTests(Host host) : base(host)
     {
     }
 
