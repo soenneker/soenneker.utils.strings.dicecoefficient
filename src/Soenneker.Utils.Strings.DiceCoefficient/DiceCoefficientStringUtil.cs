@@ -21,6 +21,12 @@ public static class DiceCoefficientStringUtil
         return similarity * 100;
     }
 
+    /// <summary>
+    /// Executes the calculate operation.
+    /// </summary>
+    /// <param name="s1">The s1.</param>
+    /// <param name="s2">The s2.</param>
+    /// <returns>The result of the operation.</returns>
     public static double Calculate(string s1, string s2)
     {
         bool isS1Empty = s1.IsNullOrEmpty();
