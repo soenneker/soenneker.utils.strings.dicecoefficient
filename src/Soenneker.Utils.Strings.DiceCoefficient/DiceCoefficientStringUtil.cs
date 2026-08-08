@@ -36,8 +36,8 @@ public static class DiceCoefficientStringUtil
             return isS1Empty && isS2Empty ? 1.0 : 0.0;
 
         // Generate bigrams and calculate intersection simultaneously
-        Dictionary<string, int> bigrams1 = GetBigramsWithFrequency(s1, out int totalBigrams1);
-        Dictionary<string, int> bigrams2 = GetBigramsWithFrequency(s2, out int totalBigrams2);
+        Dictionary<uint, int> bigrams1 = GetBigramsWithFrequency(s1, out int totalBigrams1);
+        Dictionary<uint, int> bigrams2 = GetBigramsWithFrequency(s2, out int totalBigrams2);
         int intersectionSize = CountIntersection(bigrams1, bigrams2);
 
         // Calculate the Dice Coefficient
@@ -46,31 +46,29 @@ public static class DiceCoefficientStringUtil
         return diceCoefficient;
     }
 
-    private static Dictionary<string, int> GetBigramsWithFrequency(string input, out int totalFrequency)
+    private static Dictionary<uint, int> GetBigramsWithFrequency(string input, out int totalFrequency)
     {
-        var bigrams = new Dictionary<string, int>();
-        totalFrequency = 0;
+        totalFrequency = Math.Max(0, input.Length - 1);
+        var bigrams = new Dictionary<uint, int>(totalFrequency);
 
         for (var i = 0; i < input.Length - 1; i++)
         {
-            var bigram = input.AsSpan(i, 2).ToString();
+            uint bigram = ((uint)input[i] << 16) | input[i + 1];
 
             if (!bigrams.TryAdd(bigram, 1))
             {
                 bigrams[bigram]++;
             }
-
-            totalFrequency++;
         }
 
         return bigrams;
     }
 
-    private static int CountIntersection(Dictionary<string, int> bigrams1, Dictionary<string, int> bigrams2)
+    private static int CountIntersection(Dictionary<uint, int> bigrams1, Dictionary<uint, int> bigrams2)
     {
         var intersectionCount = 0;
 
-        foreach (KeyValuePair<string, int> kvp in bigrams1)
+        foreach (KeyValuePair<uint, int> kvp in bigrams1)
         {
             if (bigrams2.TryGetValue(kvp.Key, out int frequencyInBigrams2))
             {
