@@ -35,21 +35,33 @@ public static class DiceCoefficientStringUtil
         if (isS1Empty || isS2Empty)
             return isS1Empty && isS2Empty ? 1.0 : 0.0;
 
-        // Generate bigrams and calculate intersection simultaneously
-        Dictionary<uint, int> bigrams1 = GetBigramsWithFrequency(s1, out int totalBigrams1);
-        Dictionary<uint, int> bigrams2 = GetBigramsWithFrequency(s2, out int totalBigrams2);
-        int intersectionSize = CountIntersection(bigrams1, bigrams2);
+        if (s1.Length < 2 || s2.Length < 2)
+            return s1 == s2 ? 1.0 : 0.0;
+
+        string indexed = s1.Length <= s2.Length ? s1 : s2;
+        string scanned = ReferenceEquals(indexed, s1) ? s2 : s1;
+        Dictionary<uint, int> frequencies = GetBigramsWithFrequency(indexed);
+        var intersectionSize = 0;
+
+        for (var i = 0; i < scanned.Length - 1; i++)
+        {
+            uint bigram = ((uint)scanned[i] << 16) | scanned[i + 1];
+            if (!frequencies.TryGetValue(bigram, out int frequency) || frequency == 0)
+                continue;
+
+            intersectionSize++;
+            frequencies[bigram] = frequency - 1;
+        }
 
         // Calculate the Dice Coefficient
-        double diceCoefficient = (2.0 * intersectionSize) / (totalBigrams1 + totalBigrams2);
+        double diceCoefficient = (2.0 * intersectionSize) / (s1.Length + s2.Length - 2);
 
         return diceCoefficient;
     }
 
-    private static Dictionary<uint, int> GetBigramsWithFrequency(string input, out int totalFrequency)
+    private static Dictionary<uint, int> GetBigramsWithFrequency(string input)
     {
-        totalFrequency = Math.Max(0, input.Length - 1);
-        var bigrams = new Dictionary<uint, int>(totalFrequency);
+        var bigrams = new Dictionary<uint, int>(input.Length - 1);
 
         for (var i = 0; i < input.Length - 1; i++)
         {
@@ -62,20 +74,5 @@ public static class DiceCoefficientStringUtil
         }
 
         return bigrams;
-    }
-
-    private static int CountIntersection(Dictionary<uint, int> bigrams1, Dictionary<uint, int> bigrams2)
-    {
-        var intersectionCount = 0;
-
-        foreach (KeyValuePair<uint, int> kvp in bigrams1)
-        {
-            if (bigrams2.TryGetValue(kvp.Key, out int frequencyInBigrams2))
-            {
-                intersectionCount += Math.Min(kvp.Value, frequencyInBigrams2);
-            }
-        }
-
-        return intersectionCount;
     }
 }
