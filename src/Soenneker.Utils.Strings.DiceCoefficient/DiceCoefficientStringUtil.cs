@@ -22,11 +22,11 @@ public static class DiceCoefficientStringUtil
     }
 
     /// <summary>
-    /// Executes the calculate operation.
+    /// Calculates the Sørensen–Dice similarity coefficient for two strings.
     /// </summary>
-    /// <param name="s1">The s1.</param>
-    /// <param name="s2">The s2.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <param name="s1">The first string.</param>
+    /// <param name="s2">The second string.</param>
+    /// <returns>A coefficient from 0 to 1.</returns>
     public static double Calculate(string s1, string s2)
     {
         bool isS1Empty = s1.IsNullOrEmpty();
