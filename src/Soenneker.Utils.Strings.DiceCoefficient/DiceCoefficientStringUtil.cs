@@ -1,3 +1,5 @@
+using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 using System;
 using System.Collections.Generic;
 using Soenneker.Extensions.String;
@@ -35,6 +37,9 @@ public static class DiceCoefficientStringUtil
         if (isS1Empty || isS2Empty)
             return isS1Empty && isS2Empty ? 1.0 : 0.0;
 
+        if (s1 == s2)
+            return 1.0;
+
         if (s1.Length < 2 || s2.Length < 2)
             return s1 == s2 ? 1.0 : 0.0;
 
@@ -46,11 +51,12 @@ public static class DiceCoefficientStringUtil
         for (var i = 0; i < scanned.Length - 1; i++)
         {
             uint bigram = ((uint)scanned[i] << 16) | scanned[i + 1];
-            if (!frequencies.TryGetValue(bigram, out int frequency) || frequency == 0)
+            ref int frequency = ref CollectionsMarshal.GetValueRefOrNullRef(frequencies, bigram);
+            if (Unsafe.IsNullRef(ref frequency) || frequency == 0)
                 continue;
 
             intersectionSize++;
-            frequencies[bigram] = frequency - 1;
+            frequency--;
         }
 
         // Calculate the Dice Coefficient
@@ -67,10 +73,8 @@ public static class DiceCoefficientStringUtil
         {
             uint bigram = ((uint)input[i] << 16) | input[i + 1];
 
-            if (!bigrams.TryAdd(bigram, 1))
-            {
-                bigrams[bigram]++;
-            }
+            ref int count = ref CollectionsMarshal.GetValueRefOrAddDefault(bigrams, bigram, out _);
+            count++;
         }
 
         return bigrams;
